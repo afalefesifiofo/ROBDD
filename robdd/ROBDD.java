@@ -34,7 +34,7 @@ public class ROBDD {
 		return R.toString();
 	}
 	
-	// renvoie l'index, dans la liste R,  du noeud BDD associé à la variable nom et dont les fils droit et gauche sont d'indices respectifs fd et fg.
+	// renvoie l'index, dans la liste R,  du noeud BDD associé à la variable nom et dont les fils droit et gauche sont d'indices respectifs fd et fg.
 	// Si ce noeud n'existe pas dans le diagramme, la fonction renvoie -1.
 	public int obtenirROBDDIndex(String nom, int fg, int fd) {
 		for (Noeud_ROBDD n : R) {
@@ -42,4 +42,44 @@ public class ROBDD {
 		}
 		return -1;
 	}
+
+	public Noeud_ROBDD trouvernoeud(int idv){
+		for (Noeud_ROBDD noeudRobdd:R){
+			if (noeudRobdd.getIdFilsGauche()==idv || noeudRobdd.getIdFilsDroit()==idv){
+				return noeudRobdd;
+			}
+		}
+		throw new RuntimeException("Noeud non trouver avec id:"+idv);
+
+
+	}
+
+	
+	public String trouve_sat() {
+		// Identifiant initial pour commencer la recherche de l'assignation satisfaisante
+		int idv = 1;
+		// StringBuilder pour construire l'assignation satisfaisante
+		StringBuilder sat = new StringBuilder();
+		// Tant que l'identifiant actuel n'est pas le dernier nœud dans le ROBDD
+		while (idv != this.nb_noeuds() - 1) {
+			// Trouver le nœud correspondant à l'identifiant actuel
+			Noeud_ROBDD noeudRobdd = trouvernoeud(idv);
+			// Si le fils gauche du nœud est l'identifiant actuel, ajouter la négation de la variable au résultat
+			if (noeudRobdd.getIdFilsGauche() == idv) {
+				sat.append("¬").append(noeudRobdd.getNom()).append(" ");
+			} else {
+				// Sinon, ajouter la variable au résultat
+				sat.append(noeudRobdd.getNom()).append(" ");
+			}
+			// Mettre à jour l'identifiant actuel avec l'identifiant du nœud actuel
+			idv = noeudRobdd.getId();
+			// Si l'identifiant actuel atteint la constante False (0), alors le ROBDD est non satisfiable
+			if (idv == 0) {
+				return "Le ROBDD est non sat";
+			}
+		}
+		// Retourner l'assignation satisfaisante sous forme de chaîne
+		return sat.toString();
+	}
+	
 }

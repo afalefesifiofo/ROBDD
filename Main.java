@@ -57,5 +57,15 @@ public class Main {
 		Expression exp2 = new Et(new Atome("x"),new Atome("y")); // représente (x ^ y)
 		System.out.println("\n Arbre de exp2 : \n" + exp2.arbre(ordre_atomes));		
 	*/
-	}
+
+   
+        ////////////////////***********Exercice 6********////////////////////////////////////////////////
+    System.out.println("-------------------------------#Exercice 6#----------------------------------------");
+    Expression exp_exo_6 = new Et(
+            new Equiv(new Atome("x1"), new Atome("y1")),
+            new Equiv(new Atome("x2"), new Atome("y2")));
+    System.out.println(exp_exo_6.robdd().trouve_sat());
+        
+    }
+	
 }
